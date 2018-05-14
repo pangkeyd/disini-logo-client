@@ -58,6 +58,16 @@ class ModalRegister extends React.Component {
         emailValidation: 'Harap di isi ya!'
       })
     }
+
+    if (emailVal.length > 0) {
+      request.uniqueEmail('/user/email/' + emailVal, emailVal, (res) => {
+        if (res.length > 0) {
+          this.setState({
+            emailValidation: `Email '${res[0].email}' udah ada yang pake!`
+          })
+        }
+      })
+    }
   }
 
   handleUsernameInput(e) {
@@ -79,6 +89,16 @@ class ModalRegister extends React.Component {
     if (usernameVal.length === 0) {
       this.setState({
         usernameValidation: 'Harap di isi ya!'
+      })
+    }
+
+    if (usernameVal.length > 0) {
+      request.uniqueUsername('/user/username/' + usernameVal, usernameVal, (res) => {
+        if (res.length > 0) {
+          this.setState({
+            usernameValidation: `Username '${res[0].username}' udah ada yang pake!`
+          })
+        }
       })
     }
   }
@@ -125,18 +145,38 @@ class ModalRegister extends React.Component {
 
   handleSubmitRegister(e) {
     e.preventDefault()
-    let objData = {
-      email: this.state.email,
-      username: this.state.username,
-      password: this.state.password
-    }
-    request('/user/signup', objData, function(res) {
-      if (res.status === 1) {
-        alert('Sukses Daftar!')
-        $('.modal').hide()
-        $('.modal-backdrop.in').hide()
+    if (this.state.email === '' && this.state.username === '' && this.state.password === '' && this.state.confirmPassword === '') {
+      this.setState({
+        emailValidation: 'Harap di isi ya!',
+        usernameValidation: 'Harap di isi ya!',
+        passwordValidation: 'Harap di isi ya!',
+        confirmPasswordValidation: 'Harap di isi ya!'
+      })
+    } else {
+      let objData = {
+        email: this.state.email,
+        username: this.state.username,
+        password: this.state.password
       }
-    })
+      request.signUp('/user/signup', objData, function(res) {
+        switch (res.status) {
+          case 0:
+            console.log(res)
+            break;
+          case 1:
+            alert('Sukses Daftar!')
+            $('.modal').hide()
+            $('.modal-backdrop.in').hide()
+            break;
+          case 2:
+            break;
+          case 3:
+            break;
+          default:
+            break;
+        }
+      })
+    }
   }
 
   render() {

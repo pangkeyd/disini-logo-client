@@ -5,6 +5,7 @@ import {
   Col
 } from 'react-bootstrap'
 
+import Article from './Article'
 import JumboFormLogin from './JumboFormLogin'
 
 class JumboCarousel extends React.Component {
@@ -49,6 +50,7 @@ class JumboCarousel extends React.Component {
                 </h4>
               </div>
             </OwlCarousel>
+            <Article />
           </Col>
           <Col md={ 4 }>
             <JumboFormLogin />

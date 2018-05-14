@@ -45,6 +45,10 @@
   padding: 0;
 }
 
+.owl-carousel.owl-theme.owl-loaded.owl-drag {
+  margin-bottom: 20px;
+}
+
 /* ===== JUMBOFORMLOGIN ===== */
 
 .jumbo-form-login {
@@ -60,6 +64,23 @@
 
 .jumbo-form-login input.form-control {
   box-shadow: none;
+}
+
+.jumbo-form-login button.btn.btn-primary {
+  margin-bottom: 7px
+}
+
+p.login-validation {
+  font-size: 13px;
+  color: indianred;
+}
+
+span.span-after-login-name {
+  font-weight: bold;
+}
+
+.jumbo-form-wrap {
+  padding: 10px;
 }
 
 /* MODALREGISTER */
