@@ -7,21 +7,51 @@ import {
   MenuItem
 } from 'react-bootstrap'
 
+import take from '../lib/take'
+
+// munculin profile di header saat sudah login
 export default class Header extends Component {
 
   constructor(props) {
     super(props)
 
     this.state = {
-      qwerty: localStorage.qwerty
+      token: localStorage.getItem('qwerty')
     }
+
+    // this.getLocalStorage
+
+    // this.getLocalStorage = this.getLocalStorage.bind(this)
   }
 
   componentDidMount() {
-    console.log(localStorage.qwerty, '--------------')
+    // this.getLocalStorage
+    if (localStorage.getItem('qwerty') !== null) {
+      this.setState({
+        token: localStorage.getItem('qwerty')
+      })
+    }
   }
 
+  // getLocalStorage() {
+  //   if (localStorage.getItem('qwerty') !== null) {
+  //     this.setState({
+  //       token: localStorage.getItem('qwerty')
+  //     })
+  //   }
+  // }
+
   render() {
+    // console.log(this.props.qwerty)
+    // console.log(localStorage.getItem('qwerty'), 'ini di header')
+    // console.log(this.state.token, 'ini di token')
+    // if (localStorage.getItem('qwerty') !== null) {
+    //   console.log('kiwssss')
+    // } else {
+    //   console.log('token null')
+    // }
+    console.log(this.state.token, 'ini di header')
+
     return (
       <div>
         <Navbar inverse collapseOnSelect>
@@ -33,7 +63,7 @@ export default class Header extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav>
-              { this.state.qwerty && <NavItem eventKey={2} href="#">
+              { localStorage.getItem('qwerty') && <NavItem eventKey={2} href="#">
                 Profile
               </NavItem> }
               <NavDropdown eventKey={3} title="Kategori" id="basic-nav-dropdown">

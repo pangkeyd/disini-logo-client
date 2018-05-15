@@ -83,6 +83,10 @@ span.span-after-login-name {
   padding: 10px;
 }
 
+.jumbo-form-wrap nav {
+  display: none
+}
+
 /* MODALREGISTER */
 
 .modal-register span.input-group-addon {

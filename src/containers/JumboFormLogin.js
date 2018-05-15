@@ -8,8 +8,10 @@ import {
 import jwt from 'jsonwebtoken'
 
 import ModalRegister from '../components/jumboformlogin-modal-register'
+import Header from './Header'
 
 import request from '../lib/request'
+// import take from '../lib/take'
 
 class JumboFormLogin extends React.Component {
 
@@ -20,11 +22,13 @@ class JumboFormLogin extends React.Component {
       emailOrUsername: '',
       password: '',
       loginValidation: '',
-      qwerty: localStorage.qwerty,
-      email: localStorage.asdfgh,
-      username: localStorage.zxcvbn,
-      id: localStorage.tyuiop,
-      showModalRegister: false
+      showModalRegister: false,
+      dataUser: [{
+        qwerty: localStorage.getItem('qwerty'),
+        email: localStorage.getItem('asdfgh'),
+        username: localStorage.getItem('zxcvbn'),
+        id: localStorage.getItem('tyuiop')
+      }]
     }
 
     this.handleInputText = this.handleInputText.bind(this)
@@ -59,7 +63,6 @@ class JumboFormLogin extends React.Component {
     })
   }
 
-  // localstorage undefined dan tidak terrender
   handleSubmitLogin(e) {
     e.preventDefault()
     let objData = {
@@ -77,11 +80,14 @@ class JumboFormLogin extends React.Component {
           localStorage.setItem('asdfgh', decoded.email)
           localStorage.setItem('zxcvbn', decoded.username)
           localStorage.setItem('tyuiop', decoded.id)
+          // take.localStorages(res.data.token, decoded.email, decoded.username, decoded.id)
           this.setState({
-            qwerty: res.data.token,
-            email: decoded.email,
-            username: decoded.username,
-            id: decoded.id
+            dataUser: [{
+              qwerty: res.data.token,
+              email: decoded.email,
+              username: decoded.username,
+              id: decoded.id
+            }]
           })
           break
         case 2:
@@ -98,18 +104,33 @@ class JumboFormLogin extends React.Component {
   logout() {
     localStorage.clear()
     this.setState({
-      qwerty: '',
-      email: '',
-      username: '',
-      id: null
+      dataUser: [{
+        qwerty: null,
+        email: null,
+        username: null,
+        id: null
+      }]
     })
+    // take.localStorages(null, null, null, null)
   }
 
   render() {
-    console.log(this.state.qwerty)
+    // console.log(this.state.dataUser[0].qwerty, 'ini qwerty')
+    console.log(localStorage.getItem('qwerty'), 'ini di form login')
+
     return (
       <div className="jumbo-form-wrap">
-        { this.state.qwerty === '' && <div className="jumbo-form-login">
+        <Header
+          qwerty={ this.state.dataUser[0].qwerty }
+          email={ this.state.dataUser[0].email }
+          username={ this.state.dataUser[0].username }
+          id={ this.state.dataUser[0].id }
+          // qwerty={ localStorage.getItem('qwerty') }
+          // email={ localStorage.getItem('asdfgh') }
+          // username={ localStorage.getItem('zxcvbn') }
+          // id={ localStorage.getItem('tyuiop') }
+        />
+        { this.state.dataUser[0].qwerty === null && <div className="jumbo-form-login">
           <p>Masuk</p>
           <form onSubmit={ this.handleSubmitLogin }>
             <FormGroup>
@@ -134,7 +155,7 @@ class JumboFormLogin extends React.Component {
           <p>Tidak Terdaftar? <a href="#register" onClick={ this.handleShowModal }>Daftar</a></p>
           <ModalRegister showModal={ this.state.showModalRegister } hideModal={ this.handleCloseModal } /> 
         </div> }
-        { this.state.qwerty !== '' && <div className="jumbo-form-after-login">
+        { this.state.dataUser[0].qwerty !== null && <div className="jumbo-form-after-login">
           <p>
             Selamat datang, <span className="span-after-login-name">{ localStorage.zxcvbn }!</span>
           </p>
