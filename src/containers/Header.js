@@ -6,66 +6,62 @@ import {
   NavDropdown,
   MenuItem
 } from 'react-bootstrap'
+import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router'
 
-import take from '../lib/take'
-
-// munculin profile di header saat sudah login
-export default class Header extends Component {
+class Header extends Component {
 
   constructor(props) {
     super(props)
 
     this.state = {
-      token: localStorage.getItem('qwerty')
+      onChange: localStorage.getItem('qwe123'),
+      toProfile: false
     }
 
-    // this.getLocalStorage
+    this.goToProfile = this.goToProfile.bind(this)
 
-    // this.getLocalStorage = this.getLocalStorage.bind(this)
   }
 
-  componentDidMount() {
-    // this.getLocalStorage
-    if (localStorage.getItem('qwerty') !== null) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.data_LS.length > 0) {
+      localStorage.setItem('qwe123', nextProps.data_LS[0].qwerty)
       this.setState({
-        token: localStorage.getItem('qwerty')
+        onChange: localStorage.getItem('qwe123')
+      })
+    } else {
+      this.setState({
+        onChange: null
       })
     }
   }
 
-  // getLocalStorage() {
-  //   if (localStorage.getItem('qwerty') !== null) {
-  //     this.setState({
-  //       token: localStorage.getItem('qwerty')
-  //     })
-  //   }
-  // }
+  goToProfile() {
+    this.setState({
+      toProfile: true
+    })
+  }
 
   render() {
-    // console.log(this.props.qwerty)
-    // console.log(localStorage.getItem('qwerty'), 'ini di header')
-    // console.log(this.state.token, 'ini di token')
-    // if (localStorage.getItem('qwerty') !== null) {
-    //   console.log('kiwssss')
-    // } else {
-    //   console.log('token null')
-    // }
-    console.log(this.state.token, 'ini di header')
+    const { toProfile } = this.state
+
+    if (toProfile) {
+      return <Redirect to="/profile" />
+    }
 
     return (
       <div>
         <Navbar inverse collapseOnSelect>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href="#brand">DISINI LOGO</a>
+              <Link to="/">DISINI LOGO</Link>
             </Navbar.Brand>
             <Navbar.Toggle />
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav>
-              { localStorage.getItem('qwerty') && <NavItem eventKey={2} href="#">
-                Profile
-              </NavItem> }
+              { this.state.onChange ? <NavItem to="/profile" eventKey={2} onClick={ this.goToProfile }>Profile</NavItem> : '' }
               <NavDropdown eventKey={3} title="Kategori" id="basic-nav-dropdown">
                 <MenuItem eventKey={3.1}>Action</MenuItem>
                 <MenuItem eventKey={3.2}>Another action</MenuItem>
@@ -80,3 +76,11 @@ export default class Header extends Component {
     )
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    data_LS: state.data
+  }
+}
+
+export default connect(mapStateToProps)(Header)

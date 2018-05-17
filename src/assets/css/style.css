@@ -228,3 +228,31 @@ p.footer-logo {
   font-style: italic;
   font-size: 18px;
 }
+
+/* ===== PROFILE ===== */
+
+.img-wrap {
+  text-align: center;
+}
+
+.img-wrap img {
+  width: 35%
+}
+
+.info-wrap p.text-center.username {
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.modal-edit-profile label.control-label {
+  font-weight: lighter;
+}
+
+p.change-pass-modal-label {
+  font-weight: bold;
+}
+
+.edit-image button.close-img.btn.btn-sm.btn-default {
+  position: relative;
+  top: -23px;
+}

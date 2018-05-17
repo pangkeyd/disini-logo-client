@@ -6,12 +6,16 @@ import {
   Button
 } from 'react-bootstrap'
 import jwt from 'jsonwebtoken'
+import { connect } from 'react-redux'
+
+import {
+  get_localStorage,
+  clear_localStorage
+} from '../actions'
 
 import ModalRegister from '../components/jumboformlogin-modal-register'
-import Header from './Header'
 
 import request from '../lib/request'
-// import take from '../lib/take'
 
 class JumboFormLogin extends React.Component {
 
@@ -80,7 +84,13 @@ class JumboFormLogin extends React.Component {
           localStorage.setItem('asdfgh', decoded.email)
           localStorage.setItem('zxcvbn', decoded.username)
           localStorage.setItem('tyuiop', decoded.id)
-          // take.localStorages(res.data.token, decoded.email, decoded.username, decoded.id)
+          let objLS = {
+            qwerty: res.data.token,
+            email: decoded.email,
+            username: decoded.username,
+            id: decoded.id
+          }
+          this.props.save_LS(objLS)
           this.setState({
             dataUser: [{
               qwerty: res.data.token,
@@ -102,6 +112,7 @@ class JumboFormLogin extends React.Component {
   }
 
   logout() {
+    this.props.clear_LS(localStorage.getItem('tyuiop'))
     localStorage.clear()
     this.setState({
       dataUser: [{
@@ -111,25 +122,11 @@ class JumboFormLogin extends React.Component {
         id: null
       }]
     })
-    // take.localStorages(null, null, null, null)
   }
 
   render() {
-    // console.log(this.state.dataUser[0].qwerty, 'ini qwerty')
-    console.log(localStorage.getItem('qwerty'), 'ini di form login')
-
     return (
       <div className="jumbo-form-wrap">
-        <Header
-          qwerty={ this.state.dataUser[0].qwerty }
-          email={ this.state.dataUser[0].email }
-          username={ this.state.dataUser[0].username }
-          id={ this.state.dataUser[0].id }
-          // qwerty={ localStorage.getItem('qwerty') }
-          // email={ localStorage.getItem('asdfgh') }
-          // username={ localStorage.getItem('zxcvbn') }
-          // id={ localStorage.getItem('tyuiop') }
-        />
         { this.state.dataUser[0].qwerty === null && <div className="jumbo-form-login">
           <p>Masuk</p>
           <form onSubmit={ this.handleSubmitLogin }>
@@ -172,4 +169,11 @@ class JumboFormLogin extends React.Component {
 
 }
 
-export default JumboFormLogin
+const mapDispatchToProps = (dispatch) => {
+  return {
+    save_LS: (data) => dispatch(get_localStorage(data)),
+    clear_LS: (id) => dispatch(clear_localStorage(id))
+  }
+}
+
+export default connect(null, mapDispatchToProps)(JumboFormLogin)
